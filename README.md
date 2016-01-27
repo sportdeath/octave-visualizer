@@ -1,1 +1,3 @@
-# octave-visualizer
+# Octave Visualizer
+
+An audio visualizer written in C++
