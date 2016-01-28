@@ -6,12 +6,15 @@
 
 #include "visualizer.hpp"
 #include "graphics.hpp"
+#include "audio.hpp"
 
-Visualizer::Visualizer() {
+Visualizer::Visualizer(AudioStream * s) {
+  stream = s;
+
   std::fill(spectrogram.begin(), spectrogram.end(), 0);
 
-  sf::ContextSettings settings;
   settings.antialiasingLevel = 4;
+  fullscreen = false;
 
   window.create(
       sf::VideoMode(600, 600),
@@ -22,9 +25,6 @@ Visualizer::Visualizer() {
       settings);
 
   window.setVerticalSyncEnabled(true);
-
-  norm = 0;
-  prevMax = 0;
 }
 
 void Visualizer::setSpec(int index, double val) {
@@ -36,7 +36,6 @@ double Visualizer::getSpec(int index) {
 }
 
 void Visualizer::updateWindow() {
-  //window.clear(sf::Color::Black);
 
   double delta = 2 * M_PI/SPEC_SIZE;
   int r, g, b;
@@ -66,22 +65,27 @@ void Visualizer::pollEvents() {
 
     while( window.pollEvent(event) ) {
       if (event.type == sf::Event::Closed) {
+        stream -> ~AudioStream();
         window.close();
       }
       if (event.type == sf::Event::Resized) {
         window.setView(sf::View(sf::FloatRect(0,0,event.size.width, event.size.height)));
         this -> updateWindow();
       }
+      //if ((event.type == sf::Event::KeyPressed) && (event.Key.Code == sf::Key::F)) {
+        //fullscreen = !fullscreen;
+        //window.close();
+        //window.create(
+            //sf::VideoMode(600, 600),
+            //"Visualizer",
+            //fullscreen ?
+            //sf::Style::Fullscreen :
+            //sf::Style::Titlebar |
+            //sf::Style::Resize |
+            //sf::Style::Close,
+            //settings);
+      //}
     }
 
   }
-}
-
-double Visualizer::getNorm() {
-  return norm;
-}
-
-void Visualizer::updateNorm(double maxValue) {
-  norm = norm + (maxValue - prevMax);
-  prevMax = maxValue;
 }

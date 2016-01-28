@@ -2,9 +2,10 @@
 #define AUDIO
 
 #define FRAMES_PER_BUFFER 1024
-#define OVERLAP 8
+#define OVERLAP 4
 #define SIZE (FRAMES_PER_BUFFER * OVERLAP)
 
+#include <complex>
 #include <portaudio.h>
 #include <fftw3.h>
 
@@ -26,11 +27,10 @@ class AudioStream {
     fftw_complex fft[SIZE/2 + 1];
     fftw_plan fftPlan;
 
-    // ^^needs destructor!
-  
   public:
 
     AudioStream();
+    ~AudioStream();
 
     void startStream(Visualizer * v);
 
@@ -50,10 +50,13 @@ class AudioStream {
 
     double quinnKappa(double in);
 
-    double quinnsSecondEstimator(int k, fftw_complex * fft);
+    double quinnsSecondEstimator(int k, 
+                                 std::complex<double> left,
+                                 std::complex<double> mid,
+                                 std::complex<double> right
+                                 );
 
     void streamError();
-
 };
 
 #endif

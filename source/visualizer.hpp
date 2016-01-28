@@ -4,6 +4,8 @@
 #include <array>
 #include <SFML/Graphics.hpp>
 
+class AudioStream;
+
 #define SPEC_SIZE 60
 
 class Visualizer {
@@ -11,10 +13,12 @@ class Visualizer {
     std::array<double, SPEC_SIZE> spectrogram;
     sf::RenderWindow window;
 
-    double norm;
-    double prevMax;
+    AudioStream * stream;
+    sf::ContextSettings settings;
+    bool fullscreen;
+
   public:
-    Visualizer();
+    Visualizer(AudioStream * s);
 
     void setSpec(int index, double val);
 
