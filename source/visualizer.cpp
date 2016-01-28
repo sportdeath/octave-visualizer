@@ -72,19 +72,21 @@ void Visualizer::pollEvents() {
         window.setView(sf::View(sf::FloatRect(0,0,event.size.width, event.size.height)));
         this -> updateWindow();
       }
-      //if ((event.type == sf::Event::KeyPressed) && (event.Key.Code == sf::Key::F)) {
-        //fullscreen = !fullscreen;
-        //window.close();
-        //window.create(
-            //sf::VideoMode(600, 600),
-            //"Visualizer",
-            //fullscreen ?
-            //sf::Style::Fullscreen :
-            //sf::Style::Titlebar |
-            //sf::Style::Resize |
-            //sf::Style::Close,
-            //settings);
-      //}
+      if ((event.type == sf::Event::KeyPressed) 
+          && sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
+        fullscreen = !fullscreen;
+        window.close();
+        window.create(
+            sf::VideoMode(600, 600),
+            "Visualizer",
+            fullscreen ?
+            sf::Style::Fullscreen :
+            sf::Style::Titlebar |
+            sf::Style::Resize |
+            sf::Style::Close,
+            settings);
+        window.setVerticalSyncEnabled(true);
+      }
     }
 
   }

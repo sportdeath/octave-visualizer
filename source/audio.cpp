@@ -9,13 +9,13 @@
 #include "audio.hpp"
 
 double AudioStream::quinnKappa(double in) {
-    double firstTerm = log(3*in*in + 6*in +1)/4.;
-    
-    double top = in + 1 - sqrt(2/3.);
-    double bot = in + 1 + sqrt(2/3.);
-    double secondTerm = sqrt(6)/24. * log(top/bot);
-    
-    return firstTerm + secondTerm;
+  double firstTerm = log(3*in*in + 6*in +1)/4.;
+  
+  double top = in + 1 - sqrt(2/3.);
+  double bot = in + 1 + sqrt(2/3.);
+  double secondTerm = sqrt(6)/24. * log(top/bot);
+  
+  return firstTerm + secondTerm;
 }
 
 double AudioStream::quinnsSecondEstimator(int k, 
@@ -24,17 +24,17 @@ double AudioStream::quinnsSecondEstimator(int k,
                                           std::complex<double> right
                                           ) {
 
-    double betaM1 = (left/mid).real();
-    double betaP1 = (right/mid).real();
+  double betaM1 = (left/mid).real();
+  double betaP1 = (right/mid).real();
 
-    double deltaM1 = -betaM1/(betaM1 - 1);
-    double deltaP1 = betaP1/(betaP1 - 1);
-    
-    double delta = (deltaM1 + deltaP1)/2. 
-                    + quinnKappa(deltaP1 * deltaP1) 
-                    - quinnKappa(deltaM1 * deltaM1);
-    
-    return delta;
+  double deltaM1 = -betaM1/(betaM1 - 1);
+  double deltaP1 = betaP1/(betaP1 - 1);
+  
+  double delta = (deltaM1 + deltaP1)/2. 
+                  + quinnKappa(deltaP1 * deltaP1) 
+                  - quinnKappa(deltaM1 * deltaM1);
+  
+  return delta;
 }
 
 std::complex<double> fftwToComplex(fftw_complex * fft, int bin) {
@@ -234,7 +234,8 @@ AudioStream::AudioStream() {
   fftPlan = fftw_plan_dft_r2c_1d(SIZE, 
                               windowedBuffer, 
                               fft,
-                              FFTW_ESTIMATE);
+                              FFTW_PATIENT |
+                              FFTW_DESTROY_INPUT);
 
   // Initialize normalization
   normalizationFactor = 0;

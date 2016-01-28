@@ -1,7 +1,7 @@
 #ifndef AUDIO
 #define AUDIO
 
-#define FRAMES_PER_BUFFER 1024
+#define FRAMES_PER_BUFFER 2048
 #define OVERLAP 4
 #define SIZE (FRAMES_PER_BUFFER * OVERLAP)
 
@@ -48,6 +48,9 @@ class AudioStream {
 
     void computeSpectrogram();
 
+    // Barry Quinn:
+    // Estimation of Frequency, Amplitude, and
+    // Phase from the DFT of a Time Series
     double quinnKappa(double in);
 
     double quinnsSecondEstimator(int k, 
